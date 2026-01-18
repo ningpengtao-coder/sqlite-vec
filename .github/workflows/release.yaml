@@ -275,5 +275,17 @@ jobs:
           ./scripts/vendor.sh
           cd bindings/dart
           sed -i "s/^version: .*/version: $(cat ../../VERSION)/" pubspec.yaml
+          
+          # Prepend version to CHANGELOG.md if not present
+          VERSION=$(cat ../../VERSION)
+          if ! grep -q "## $VERSION" CHANGELOG.md; then
+            echo "## $VERSION" > CHANGELOG.tmp
+            echo "" >> CHANGELOG.tmp
+            echo "* Release $VERSION" >> CHANGELOG.tmp
+            echo "" >> CHANGELOG.tmp
+            cat CHANGELOG.md >> CHANGELOG.tmp
+            mv CHANGELOG.tmp CHANGELOG.md
+          fi
+
           make deps
           flutter pub publish -f

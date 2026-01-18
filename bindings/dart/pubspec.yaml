@@ -1,7 +1,7 @@
 name: sqlite_vec
-description: "A new Flutter FFI plugin project."
+description: "Work with vector embeddings in SQLite. Based on sqlite-vec."
 version: 0.0.1
-homepage:
+repository: https://github.com/ningpengtao-coder/sqlite-vec/tree/main/bindings/dart
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
