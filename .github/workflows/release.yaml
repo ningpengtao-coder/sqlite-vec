@@ -272,6 +272,7 @@ jobs:
       - run: ./scripts/vendor.sh
       - run: make sqlite-vec.h
       - run: make deps
+        working-directory: bindings/dart
       - run: |
           mkdir -p ~/.config/dart
           echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.config/dart/pub-credentials.json
