@@ -266,7 +266,9 @@ jobs:
             --clobber
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
       - run: |
           mkdir -p ~/.config/dart
           echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.config/dart/pub-credentials.json
@@ -274,4 +276,4 @@ jobs:
           cd bindings/dart
           sed -i "s/^version: .*/version: $(cat ../../VERSION)/" pubspec.yaml
           make deps
-          dart pub publish -f
+          flutter pub publish -f
