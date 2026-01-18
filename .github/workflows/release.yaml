@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   build-linux-x86_64-extension:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - run: ./scripts/vendor.sh
@@ -300,6 +300,15 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      - uses: dart-lang/setup-dart@v1
+      - run: |
+          mkdir -p ~/.config/dart
+          echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.config/dart/pub-credentials.json
+          ./scripts/vendor.sh
+          cd bindings/dart
+          sed -i "s/^version: .*/version: $(cat ../../VERSION)/" pubspec.yaml
+          make deps
+          dart pub publish -f
   upload-crate:
     runs-on: ubuntu-latest
     steps:
