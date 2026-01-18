@@ -269,13 +269,13 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - run: ./scripts/vendor.sh
+      - run: make sqlite-vec.h
+      - run: make deps
       - run: |
           mkdir -p ~/.config/dart
           echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.config/dart/pub-credentials.json
-          ./scripts/vendor.sh
-          cd bindings/dart
           sed -i "s/^version: .*/version: $(cat ../../VERSION)/" pubspec.yaml
-          
           # Prepend version to CHANGELOG.md if not present
           VERSION=$(cat ../../VERSION)
           if ! grep -q "## $VERSION" CHANGELOG.md; then
@@ -286,6 +286,6 @@ jobs:
             cat CHANGELOG.md >> CHANGELOG.tmp
             mv CHANGELOG.tmp CHANGELOG.md
           fi
-
-          make deps
+          
           flutter pub publish -f
+        working-directory: bindings/dart
