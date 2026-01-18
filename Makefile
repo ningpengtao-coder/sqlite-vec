@@ -43,11 +43,14 @@ PYTHON=python3
 endif
 
 ifndef OMIT_SIMD
-	ifeq ($(shell uname -sm),Darwin x86_64)
-	CFLAGS += -mavx -DSQLITE_VEC_ENABLE_AVX
-	endif
-	ifeq ($(shell uname -sm),Darwin arm64)
-	CFLAGS += -mcpu=apple-m1 -DSQLITE_VEC_ENABLE_NEON
+	TARGET_ARCH ?= $(shell uname -m)
+	ifeq ($(shell uname -s),Darwin)
+		ifneq ($(filter x86_64,$(TARGET_ARCH)),)
+			CFLAGS += -mavx -DSQLITE_VEC_ENABLE_AVX
+		endif
+		ifneq ($(filter arm64,$(TARGET_ARCH)),)
+			CFLAGS += -mcpu=apple-m1 -DSQLITE_VEC_ENABLE_NEON
+		endif
 	endif
 endif
 
